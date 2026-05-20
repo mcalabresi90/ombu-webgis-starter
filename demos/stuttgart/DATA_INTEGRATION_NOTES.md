@@ -16,7 +16,7 @@ Processed parquet/geojson are **not in git** (see ETL `.gitignore`). This protot
 | Viewer layer | File | Source in this demo | Status |
 |--------------|------|---------------------|--------|
 | **Official Parcels / ALKIS** | — (WMS tiles) | [LGL-BW INSPIRE WMS](https://owsproxy.lgl-bw.de/owsproxy/ows/WMS_INSP_BW_Flst_ALKIS) · `alkis:CP.CadastralParcel` | Live WMS · on by default |
-| **Official land value zones / Bodenrichtwerte** | — (WMS tiles) | [WMS Bodenrichtwertkarte – Landeshauptstadt Stuttgart](https://metadaten.geoportal-bw.de/geonetwork/srv/api/records/1ffa90b9-f3f9-16d4-839e-db8af4066350) · `gis5.stuttgart.de/.../WMS_BRWK` | Live WMS · **off by default** (opacity ~0.48) |
+| **Official land value zones / Bodenrichtwerte** | — (WMS tiles) | [WMS Bodenrichtwertkarte – Landeshauptstadt Stuttgart](https://metadaten.geoportal-bw.de/geonetwork/srv/api/records/1ffa90b9-f3f9-16d4-839e-db8af4066350) · `geoserver.stuttgart.de` layer `GEOLINE_FLEX:A62_BRWK25_Innenstadt_2025_EPSG25832` (same as [Stadtplan](https://maps.stuttgart.de/stadtplan/)) | Live WMS · **off by default** (opacity ~0.48) |
 | Roads | `roads.geojson` | OSM via export script (ETL layer name `roads`) | Exported |
 | Buildings | `buildings.geojson` | OSM · ETL `buildings` | Exported |
 | Amenities | `pois.geojson` | OSM · ETL `amenities` | Exported |
@@ -34,7 +34,9 @@ Export manifest: `data/map_geojson/export_manifest.json`
 | **Origin** | Landeshauptstadt Stuttgart, Stadtmessungsamt (Gutachterausschuss) |
 | **Service** | WMS Bodenrichtwertkarte – Landeshauptstadt Stuttgart |
 | **Type** | WMS (raster map, zones with €/m² reference values) |
-| **Endpoint** | `https://gis5.stuttgart.de/arcgis/services/3_GEOLINE_FLEX/WMS_BRWK/MapServer/WMSServer` |
+| **Endpoint** | `https://geoserver.stuttgart.de/geoserver/ows/` |
+| **Layer name** | `GEOLINE_FLEX:A62_BRWK25_Innenstadt_2025_EPSG25832` (Innenstadt detail, 2025) |
+| **Retired** | `gis5.stuttgart.de/.../WMS_BRWK` — ArcGIS 499 / service removed from REST catalog |
 | **Layer id** | `0` (ArcGIS MapServer export) |
 | **Metadata** | [Geoportal BW record](https://metadaten.geoportal-bw.de/geonetwork/srv/api/records/1ffa90b9-f3f9-16d4-839e-db8af4066350) |
 
@@ -85,7 +87,8 @@ Do not use `file://` (browser blocks GeoJSON fetch).
 - **BBox** is a small Stuttgart-Mitte window (~1 km), not the full city in `city.yaml` (`9.0–9.4, 48.6–48.9`).
 - **ALKIS WMS** depends on LGL BW uptime; no offline parcels.
 - **POI density** is raw OSM amenities, not ETL’s 21-category amenity rollup.
-- **Bodenrichtwert WMS** may block some server/datacenter IPs (ArcGIS 499); usually works in a normal browser on a home/office network. Toggle layer in the control panel.
+- **Bodenrichtwert WMS** uses `geoserver.stuttgart.de` (not the retired `gis5` ArcGIS path). Detail layer is visible from scale **1:30 000** onward — zoom to Stuttgart-Mitte (~z15–16). If tiles fail, the status line shows a hint (Leaflet does not log WMS image errors to the console).
+- **Click → €/m² in popup:** `getBRWbyCoords.json` (BORIS-BW / `gis-rest.nrw.de`) with GeoJSON `FeatureCollection` + `EPSG:4326` — same backend as the official BORIS portal. Config: `viewer/config/demo_map_layers.json` → `borisApi`.
 - **Client market data** (listings, valuations) — not connected; sidebar describes future overlay only.
 - Re-export overwrites GeoJSON; commit only if you intend to version demo data.
 

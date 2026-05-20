@@ -24,7 +24,8 @@ Open **http://localhost:8080/demos/stuttgart/** (not `file://`).
 | Layer | Delivery |
 |-------|----------|
 | Parcels | ALKIS WMS (LGL Baden-Württemberg) |
-| Land value zones | Bodenrichtwertkarte WMS (Stuttgart Gutachterausschuss) — toggle in layer control |
+| Land value zones | Bodenrichtwertkarte 2025 (Innenstadt) via `geoserver.stuttgart.de` — €/m² on zone labels; **click** map for ALKIS parcel + BORIS link |
+| Interaction | Click buildings/amenities/transit/green for OSM popups; click map for cadastral parcel (GetFeatureInfo) |
 | Roads, buildings, POIs, transit, cycleways, green | `data/map_geojson/*.geojson` |
 
 See **DATA_INTEGRATION_NOTES.md** for provenance, gaps, and re-export.

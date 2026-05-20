@@ -3,6 +3,10 @@
   "center": [9.1825, 48.7768],
   "zoom": 16,
   "dataBase": "../../data/map_geojson/",
+  "borisApi": {
+    "url": "https://www.gis-rest.nrw.de/grs/rest/boris-bw/orderService/getBRWbyCoords.json",
+    "source": "BORIS-BW (Gutachterausschüsse BW / LGL)"
+  },
   "wms": {
     "alkis": {
       "id": "alkis",
@@ -19,15 +23,17 @@
     "bodenrichtwert": {
       "id": "bodenrichtwert",
       "label": "Official land value zones / Bodenrichtwerte",
-      "description": "Official reference land value zones in €/m² from the Stuttgart Gutachterausschuss (Bodenrichtwertkarte). Not market asking or transaction prices.",
-      "url": "https://gis5.stuttgart.de/arcgis/services/3_GEOLINE_FLEX/WMS_BRWK/MapServer/WMSServer",
-      "layers": "0",
+      "description": "Official reference land value zones in €/m² (Bodenrichtwertkarte 2025, Innenstadt detail). Same layer as maps.stuttgart.de Stadtplan. Not market asking or transaction prices.",
+      "url": "https://geoserver.stuttgart.de/geoserver/ows/",
+      "layers": "GEOLINE_FLEX:A62_BRWK25_Innenstadt_2025_EPSG25832",
       "version": "1.3.0",
       "format": "image/png",
-      "visible": false,
-      "opacity": 0.48,
-      "attribution": "© Landeshauptstadt Stuttgart · Stadtmessungsamt · Bodenrichtwertkarte",
-      "metadata": "https://metadaten.geoportal-bw.de/geonetwork/srv/api/records/1ffa90b9-f3f9-16d4-839e-db8af4066350"
+      "visible": true,
+      "opacity": 0.72,
+      "maxScaleDenominator": 30000,
+      "attribution": "© Landeshauptstadt Stuttgart · Stadtmessungsamt · Bodenrichtwertkarte 2025",
+      "metadata": "https://metadaten.geoportal-bw.de/geonetwork/srv/api/records/1ffa90b9-f3f9-16d4-839e-db8af4066350",
+      "sourceNote": "Retired endpoint gis5/.../WMS_BRWK (ArcGIS 499); active WMS via geoserver.stuttgart.de per maps.stuttgart.de/_config/ressources/services.json"
     }
   },
   "layers": [
