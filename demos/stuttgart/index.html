@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ombu Spatial Layer · Stuttgart Prototype</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #2f2222;
+      --muted: #817877;
+      --paper: #fffaf5;
+      --panel: rgba(255, 250, 245, 0.94);
+      --line: #ddd7c4;
+      --accent: #c06158;
+      --accent-soft: #e8c5b7;
+      --shadow: 0 12px 40px rgba(47, 34, 34, 0.08);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: "DM Sans", system-ui, sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+    }
+    .app {
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 340px minmax(0, 1fr);
+    }
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      padding: 22px 20px 18px;
+      overflow-y: auto;
+      z-index: 500;
+    }
+    .brand {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 6px;
+    }
+    .sidebar h1 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .lede {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.55);
+    }
+    .card h2 {
+      margin: 0 0 4px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .card p {
+      margin: 0;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    .card.placeholder {
+      border-style: dashed;
+      opacity: 0.88;
+    }
+    .card .tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+    }
+    .panel-block {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+    .panel-block h3 {
+      margin: 0 0 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .layer-list label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 0;
+      font-size: 0.88rem;
+      cursor: pointer;
+    }
+    .layer-list label.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .layer-list input:disabled { cursor: not-allowed; }
+    .status {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 12px;
+      line-height: 1.4;
+    }
+    .map-wrap {
+      position: relative;
+      min-height: 0;
+    }
+    #map {
+      width: 100%;
+      height: 100%;
+      background: #ece8e4;
+    }
+    .map-caption {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      z-index: 800;
+      max-width: min(520px, calc(100% - 36px));
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    .map-caption strong {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .scale-chip {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 800;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    @media (max-width: 960px) {
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+      .sidebar { max-height: 42vh; border-right: none; border-bottom: 1px solid var(--line); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <p class="brand">Ombu · Spatial intelligence</p>
+      <h1>Ombu Spatial Layer · Stuttgart Prototype</h1>
+      <p class="lede">Territorial read of Stuttgart-Mitte with official cadastral parcels (ALKIS) and OSM context exported in ETL layer taxonomy (static GeoJSON).</p>
+
+      <div class="card">
+        <h2>Official parcels</h2>
+        <p>ALKIS cadastral parcels (LGL Baden-Württemberg WMS) as the authoritative land-unit layer.</p>
+      </div>
+      <div class="card">
+        <h2>Urban context</h2>
+        <p>Roads, buildings, amenities, transit, cycleways, and green areas from bundled GeoJSON (sourced via ETL-Geodata-Pipeline taxonomy).</p>
+      </div>
+      <div class="card">
+        <h2>Spatial intelligence</h2>
+        <p>Ombu palette and layer hierarchy frame parcel-scale analysis without a heavy GIS shell.</p>
+      </div>
+      <div class="card placeholder">
+        <h2>Market integration</h2>
+        <p>Placeholder for listings, values, and comparables once connected to Ombu market data.</p>
+        <span class="tag">Future layer</span>
+      </div>
+
+      <div class="panel-block">
+        <h3>Layer control</h3>
+        <div class="layer-list" id="layer-list"></div>
+        <p class="status" id="status">Initializing map…</p>
+      </div>
+    </aside>
+
+    <div class="map-wrap">
+      <div id="map"></div>
+      <div class="scale-chip" id="scale-chip">Stuttgart-Mitte · ~1.2 km window</div>
+      <div class="map-caption">
+        <strong>Prototype note</strong>
+        This is a standalone prototype showing how the Ombu territorial layer could operate on Stuttgart using official cadastral parcels and OSM urban context.
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="./js/ombu_palette_tokens.js"></script>
+  <script src="./js/stuttgart_map.js"></script>
+</body>
+</html>

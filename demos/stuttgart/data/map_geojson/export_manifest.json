@@ -1,0 +1,35 @@
+{
+  "source": "overpass-etl-taxonomy",
+  "bbox": {
+    "south": 48.7718,
+    "west": 9.1725,
+    "north": 48.7818,
+    "east": 9.1925
+  },
+  "layers": {
+    "roads": {
+      "file": "roads.geojson",
+      "features": 2019
+    },
+    "buildings": {
+      "file": "buildings.geojson",
+      "features": 2090
+    },
+    "pois": {
+      "file": "pois.geojson",
+      "features": 1453
+    },
+    "transit": {
+      "file": "transit.geojson",
+      "features": 85
+    },
+    "cycleways": {
+      "file": "cycleways.geojson",
+      "features": 315
+    },
+    "green_areas": {
+      "file": "green_areas.geojson",
+      "features": 165
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "description": "Stuttgart-Mitte prototype — static OSM layers (ETL taxonomy) + ALKIS WMS parcels.",
+  "center": [9.1825, 48.7768],
+  "zoom": 16,
+  "dataBase": "../../data/map_geojson/",
+  "wms": {
+    "alkis": {
+      "id": "alkis",
+      "label": "Official Parcels / ALKIS",
+      "url": "https://owsproxy.lgl-bw.de/owsproxy/ows/WMS_INSP_BW_Flst_ALKIS",
+      "layers": "alkis:CP.CadastralParcel",
+      "visible": true
+    }
+  },
+  "layers": [
+    {
+      "id": "green_areas",
+      "label": "Green areas",
+      "file": "green_areas.geojson",
+      "type": "geojson",
+      "visible": true,
+      "style": {
+        "color": "#6b8e7a",
+        "weight": 0.8,
+        "fillColor": "#b6cba8",
+        "fillOpacity": 0.35
+      }
+    },
+    {
+      "id": "buildings",
+      "label": "Buildings",
+      "file": "buildings.geojson",
+      "type": "geojson",
+      "visible": true,
+      "style": {
+        "color": "#b19888",
+        "weight": 0.35,
+        "fillColor": "#e7d8d0",
+        "fillOpacity": 0.5
+      }
+    },
+    {
+      "id": "roads",
+      "label": "Roads",
+      "file": "roads.geojson",
+      "type": "geojson",
+      "visible": true,
+      "style": {
+        "color": "#4b2e2e",
+        "weight": 2,
+        "opacity": 0.85
+      }
+    },
+    {
+      "id": "cycleways",
+      "label": "Cycleways",
+      "file": "cycleways.geojson",
+      "type": "geojson",
+      "visible": true,
+      "style": {
+        "color": "#6b9b6b",
+        "weight": 2,
+        "opacity": 0.9,
+        "dashArray": "4,4"
+      }
+    },
+    {
+      "id": "transit",
+      "label": "Transit",
+      "file": "transit.geojson",
+      "type": "geojson-point",
+      "visible": true,
+      "style": {
+        "color": "#4b6279",
+        "radius": 5
+      }
+    },
+    {
+      "id": "pois",
+      "label": "Amenities",
+      "file": "pois.geojson",
+      "type": "geojson-point",
+      "visible": true,
+      "style": {
+        "color": "#c06158",
+        "radius": 4
+      }
+    }
+  ]
+}

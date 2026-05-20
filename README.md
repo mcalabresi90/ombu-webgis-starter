@@ -36,21 +36,32 @@ your-repo/
   scripts/          # optional
 ```
 
+## Demos in this repo
+
+| Demo | Path | Description |
+|------|------|-------------|
+| **Generic starter** | `viewer/mapa_demo.html` | Placeholder site context (copy-paste template) |
+| **Stuttgart prototype** | `demos/stuttgart/` | ALKIS cadastral WMS + OSM GeoJSON ([ETL-Geodata-Pipeline](https://github.com/Manoela-Calabresi-Portfolio/ETL-Geodata-Pipeline) layer taxonomy) |
+
+Stuttgart details: `demos/stuttgart/DATA_INTEGRATION_NOTES.md`
+
 ## Run locally
 
-**Important:** serve the pack root so `viewer/` and `data/` share a common ancestor (same rule as production).
+**Important:** serve the **repository root** so `viewer/`, `data/`, and `demos/` share a common ancestor.
 
 ```bash
-cd exports/webgis-starter-pack   # or your copied folder root
+git clone https://github.com/mcalabresi90/ombu-webgis-starter.git
+cd ombu-webgis-starter
 python -m http.server 8080
 ```
 
 Open:
 
-- http://localhost:8080/viewer/index.html  
-- http://localhost:8080/viewer/mapa_demo.html?map=demo-site-context
+- http://localhost:8080/ — demo index  
+- http://localhost:8080/viewer/mapa_demo.html?map=demo-site-context  
+- http://localhost:8080/demos/stuttgart/ — **Stuttgart spatial prototype**
 
-Do **not** open `mapa_demo.html` via `file://` — browsers block GeoJSON fetches.
+Do **not** open HTML via `file://` — browsers block GeoJSON fetches.
 
 ## Expected data format
 
