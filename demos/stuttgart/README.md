@@ -2,7 +2,9 @@
 
 Part of [ombu-webgis-starter](https://github.com/mcalabresi90/ombu-webgis-starter) (`demos/stuttgart/`).
 
-Territorial demo for **Stuttgart-Mitte** — official **ALKIS** parcels (WMS) plus **OSM context** as static GeoJSON aligned with [ETL-Geodata-Pipeline](https://github.com/Manoela-Calabresi-Portfolio/ETL-Geodata-Pipeline).
+Territorial demo for **Stuttgart-Mitte** — official **ALKIS** parcels (WMS), optional **Bodenrichtwert** land-value zones (WMS, €/m²), plus **OSM context** as static GeoJSON aligned with [ETL-Geodata-Pipeline](https://github.com/Manoela-Calabresi-Portfolio/ETL-Geodata-Pipeline).
+
+**Note:** Bodenrichtwerte are official land reference values, not apartment transaction or asking prices.
 
 Not a product build: no PostGIS, no backend, no full ETL run required to view.
 
@@ -22,6 +24,7 @@ Open **http://localhost:8080/demos/stuttgart/** (not `file://`).
 | Layer | Delivery |
 |-------|----------|
 | Parcels | ALKIS WMS (LGL Baden-Württemberg) |
+| Land value zones | Bodenrichtwertkarte WMS (Stuttgart Gutachterausschuss) — toggle in layer control |
 | Roads, buildings, POIs, transit, cycleways, green | `data/map_geojson/*.geojson` |
 
 See **DATA_INTEGRATION_NOTES.md** for provenance, gaps, and re-export.

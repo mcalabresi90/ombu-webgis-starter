@@ -15,16 +15,32 @@ Processed parquet/geojson are **not in git** (see ETL `.gitignore`). This protot
 
 | Viewer layer | File | Source in this demo | Status |
 |--------------|------|---------------------|--------|
-| **Official Parcels / ALKIS** | — (WMS tiles) | [LGL-BW INSPIRE WMS](https://owsproxy.lgl-bw.de/owsproxy/ows/WMS_INSP_BW_Flst_ALKIS) · `alkis:CP.CadastralParcel` | Live WMS |
+| **Official Parcels / ALKIS** | — (WMS tiles) | [LGL-BW INSPIRE WMS](https://owsproxy.lgl-bw.de/owsproxy/ows/WMS_INSP_BW_Flst_ALKIS) · `alkis:CP.CadastralParcel` | Live WMS · on by default |
+| **Official land value zones / Bodenrichtwerte** | — (WMS tiles) | [WMS Bodenrichtwertkarte – Landeshauptstadt Stuttgart](https://metadaten.geoportal-bw.de/geonetwork/srv/api/records/1ffa90b9-f3f9-16d4-839e-db8af4066350) · `gis5.stuttgart.de/.../WMS_BRWK` | Live WMS · **off by default** (opacity ~0.48) |
 | Roads | `roads.geojson` | OSM via export script (ETL layer name `roads`) | Exported |
 | Buildings | `buildings.geojson` | OSM · ETL `buildings` | Exported |
 | Amenities | `pois.geojson` | OSM · ETL `amenities` | Exported |
 | Transit | `transit.geojson` | OSM · ETL `pt_stops` | Exported |
 | Cycleways | `cycleways.geojson` | OSM · ETL `cycle` | Exported |
 | Green areas | `green_areas.geojson` | OSM landuse/leisure · ETL `landuse` subset | Exported |
-| Future market layer | — | UI placeholder only | Not implemented |
+| Client market / listings | — | Sidebar describes future overlay only | Not implemented |
 
 Export manifest: `data/map_geojson/export_manifest.json`
+
+## Bodenrichtwert WMS (official land value)
+
+| Field | Value |
+|-------|--------|
+| **Origin** | Landeshauptstadt Stuttgart, Stadtmessungsamt (Gutachterausschuss) |
+| **Service** | WMS Bodenrichtwertkarte – Landeshauptstadt Stuttgart |
+| **Type** | WMS (raster map, zones with €/m² reference values) |
+| **Endpoint** | `https://gis5.stuttgart.de/arcgis/services/3_GEOLINE_FLEX/WMS_BRWK/MapServer/WMSServer` |
+| **Layer id** | `0` (ArcGIS MapServer export) |
+| **Metadata** | [Geoportal BW record](https://metadaten.geoportal-bw.de/geonetwork/srv/api/records/1ffa90b9-f3f9-16d4-839e-db8af4066350) |
+
+**Limitation (important):** Bodenrichtwerte are **official land reference values** (*Bodenrichtwert*), not apartment **asking prices**, **transaction prices**, or Ombu market listings. Do not label this layer as “market price” or “sale price”.
+
+Config: `viewer/config/demo_map_layers.json` → `wms.bodenrichtwert`.
 
 ## What was not used
 
@@ -69,12 +85,14 @@ Do not use `file://` (browser blocks GeoJSON fetch).
 - **BBox** is a small Stuttgart-Mitte window (~1 km), not the full city in `city.yaml` (`9.0–9.4, 48.6–48.9`).
 - **ALKIS WMS** depends on LGL BW uptime; no offline parcels.
 - **POI density** is raw OSM amenities, not ETL’s 21-category amenity rollup.
-- **No market layer** — card is narrative only for the call.
+- **Bodenrichtwert WMS** may block some server/datacenter IPs (ArcGIS 499); usually works in a normal browser on a home/office network. Toggle layer in the control panel.
+- **Client market data** (listings, valuations) — not connected; sidebar describes future overlay only.
 - Re-export overwrites GeoJSON; commit only if you intend to version demo data.
 
 ## Success criteria (this build)
 
 - ALKIS parcels visible on load (WMS on top)
+- Bodenrichtwert zones available as optional WMS (official €/m² reference)
 - Roads + buildings + cycleways + green areas from static files
 - POIs + transit points when export succeeded
 - Sidebar + prototype caption unchanged

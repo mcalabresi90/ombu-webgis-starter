@@ -1,6 +1,6 @@
 /**
  * Ombu Stuttgart spatial prototype
- * ALKIS: LGL-BW WMS · OSM context: static GeoJSON (ETL-Geodata-Pipeline taxonomy)
+ * WMS: ALKIS parcels + Bodenrichtwertkarte (official) · OSM: static GeoJSON
  */
 (function () {
   'use strict';
@@ -16,8 +16,6 @@
     roadLocal: '#ddd7c4',
     amenity: '#c06158',
     transit: '#4b6279',
-    cycle: '#6b9b6b',
-    green: '#b6cba8',
     focusRing: '#c06158'
   }, PALETTE.colors || {});
 
@@ -25,21 +23,25 @@
   const DATA_BASE = new URL('data/map_geojson/', window.location.href);
   const CONFIG_URL = new URL('viewer/config/demo_map_layers.json', window.location.href);
 
-  const ALKIS_WMS_URL = 'https://owsproxy.lgl-bw.de/owsproxy/ows/WMS_INSP_BW_Flst_ALKIS';
-  const ALKIS_LAYER = 'alkis:CP.CadastralParcel';
-
-  const LAYER_DEFS = [
-    { id: 'alkis', label: 'Parcels / ALKIS', kind: 'wms', visible: true },
-    { id: 'roads', label: 'Roads', kind: 'geojson', visible: true },
-    { id: 'buildings', label: 'Buildings', kind: 'geojson', visible: true },
-    { id: 'pois', label: 'Amenities', kind: 'geojson', visible: true },
-    { id: 'transit', label: 'Transit', kind: 'geojson', visible: true },
-    { id: 'cycleways', label: 'Cycleways', kind: 'geojson', visible: true },
-    { id: 'green_areas', label: 'Green areas', kind: 'geojson', visible: true },
-    { id: 'market', label: 'Future market layer', kind: 'placeholder', visible: false, disabled: true }
+  /** Layer control order (WMS + GeoJSON). */
+  const CONTROL_ORDER = [
+    'alkis',
+    'bodenrichtwert',
+    'roads',
+    'buildings',
+    'pois',
+    'transit',
+    'cycleways',
+    'green_areas'
   ];
 
-  const state = { map: null, layers: {}, manifest: null };
+  const state = {
+    map: null,
+    layers: {},
+    layerDefs: [],
+    manifest: null,
+    wmsConfig: {}
+  };
 
   function $(id) {
     return document.getElementById(id);
@@ -52,7 +54,7 @@
 
   function geojsonUrl(file) {
     const u = new URL(file, DATA_BASE);
-    u.searchParams.set('v', state.manifest && state.manifest.source ? state.manifest.source : '1');
+    u.searchParams.set('v', (state.manifest && state.manifest.source) || '1');
     return u.href;
   }
 
@@ -101,6 +103,30 @@
     });
   }
 
+  function addWmsLayer(entry) {
+    const layer = L.tileLayer.wms(entry.url, {
+      layers: entry.layers,
+      format: entry.format || 'image/png',
+      transparent: true,
+      version: entry.version || '1.3.0',
+      opacity: entry.opacity != null ? entry.opacity : 0.85,
+      attribution: entry.attribution || '',
+      maxZoom: 22
+    });
+    state.layers[entry.id] = layer;
+    if (entry.visible !== false) {
+      layer.addTo(state.map);
+    }
+    return layer;
+  }
+
+  function refreshWmsStack() {
+    const brw = state.layers.bodenrichtwert;
+    const alkis = state.layers.alkis;
+    if (brw && brw.bringToFront) brw.bringToFront();
+    if (alkis && alkis.bringToFront) alkis.bringToFront();
+  }
+
   async function loadGeoJsonLayer(entry) {
     const gj = await fetchJson(geojsonUrl(entry.file));
     const isPoint = entry.type === 'geojson-point'
@@ -122,43 +148,53 @@
     return gj.features ? gj.features.length : 0;
   }
 
-  function addAlkisLayer() {
-    const layer = L.tileLayer.wms(ALKIS_WMS_URL, {
-      layers: ALKIS_LAYER,
-      format: 'image/png',
-      transparent: true,
-      version: '1.3.0',
-      opacity: 0.9,
-      attribution: '&copy; LGL Baden-Württemberg · ALKIS',
-      maxZoom: 22
+  function buildLayerDefs(config) {
+    const wms = config.wms || {};
+    state.wmsConfig = wms;
+    const defs = [];
+    CONTROL_ORDER.forEach((id) => {
+      if (wms[id]) {
+        defs.push({
+          id,
+          label: wms[id].label || id,
+          kind: 'wms',
+          visible: wms[id].visible !== false
+        });
+        return;
+      }
+      const gj = (config.layers || []).find((l) => l.id === id);
+      if (gj) {
+        defs.push({
+          id,
+          label: gj.label || id,
+          kind: 'geojson',
+          visible: gj.visible !== false
+        });
+      }
     });
-    layer.addTo(state.map);
-    state.layers.alkis = layer;
+    state.layerDefs = defs;
   }
 
   function renderLayerControls() {
     const host = $('layer-list');
     if (!host) return;
     host.innerHTML = '';
-    LAYER_DEFS.forEach((def) => {
+    state.layerDefs.forEach((def) => {
       const row = document.createElement('label');
-      if (def.disabled) row.className = 'disabled';
       const cb = document.createElement('input');
       cb.type = 'checkbox';
-      cb.checked = !!def.visible && !def.disabled;
-      cb.disabled = !!def.disabled;
-      if (!def.disabled && def.kind !== 'placeholder') {
-        cb.addEventListener('change', () => {
-          const layer = state.layers[def.id];
-          if (!layer) return;
-          if (cb.checked) {
-            layer.addTo(state.map);
-            if (def.id === 'alkis' && layer.bringToFront) layer.bringToFront();
-          } else {
-            state.map.removeLayer(layer);
-          }
-        });
-      }
+      cb.checked = !!def.visible;
+      cb.addEventListener('change', () => {
+        const layer = state.layers[def.id];
+        if (!layer) return;
+        def.visible = cb.checked;
+        if (cb.checked) {
+          layer.addTo(state.map);
+          if (def.kind === 'wms') refreshWmsStack();
+        } else {
+          state.map.removeLayer(layer);
+        }
+      });
       row.appendChild(cb);
       row.appendChild(document.createTextNode(def.label));
       host.appendChild(row);
@@ -182,21 +218,33 @@
     }).addTo(state.map);
     state.map.setView(VIEW.center, VIEW.zoom);
 
-    renderLayerControls();
-    setStatus('Loading ALKIS + OSM layers…');
-
-    addAlkisLayer();
-    await loadManifest();
+    setStatus('Loading map config…');
 
     let config;
     try {
       config = await fetchJson(CONFIG_URL.href);
     } catch (err) {
       console.warn(err);
-      config = { layers: [] };
+      config = { layers: [], wms: {} };
     }
 
+    buildLayerDefs(config);
+    renderLayerControls();
+    await loadManifest();
+
     const counts = [];
+    const wmsEntries = config.wms || {};
+    Object.keys(wmsEntries).forEach((key) => {
+      const entry = wmsEntries[key];
+      try {
+        addWmsLayer(entry);
+        counts.push(`${entry.id}: WMS`);
+      } catch (err) {
+        console.warn(`WMS ${entry.id} failed`, err);
+        counts.push(`${entry.id}: WMS error`);
+      }
+    });
+
     const stack = Array.isArray(config.layers) ? config.layers.slice() : [];
     for (let i = 0; i < stack.length; i += 1) {
       const entry = stack[i];
@@ -209,9 +257,7 @@
       }
     }
 
-    if (state.layers.alkis && state.layers.alkis.bringToFront) {
-      state.layers.alkis.bringToFront();
-    }
+    refreshWmsStack();
 
     const src = (state.manifest && state.manifest.source) || 'static GeoJSON';
     setStatus(`Ready · ${src} · ${counts.join(' · ')}`);

@@ -78,6 +78,13 @@
       line-height: 1.45;
       color: var(--muted);
     }
+    .card ul {
+      margin: 8px 0 0;
+      padding-left: 1.1rem;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: var(--muted);
+    }
     .card.placeholder {
       border-style: dashed;
       opacity: 0.88;
@@ -197,10 +204,14 @@
         <h2>Spatial intelligence</h2>
         <p>Ombu palette and layer hierarchy frame parcel-scale analysis without a heavy GIS shell.</p>
       </div>
-      <div class="card placeholder">
-        <h2>Market integration</h2>
-        <p>Placeholder for listings, values, and comparables once connected to Ombu market data.</p>
-        <span class="tag">Future layer</span>
+      <div class="card">
+        <h2>Market / land value layer</h2>
+        <p>Public official land value zones can be overlaid with parcels and urban context. Client market data can later be connected on top of this structure.</p>
+        <ul>
+          <li>Official land value zones in €/m² (Bodenrichtwerte)</li>
+          <li>Parcel-level spatial reference (ALKIS)</li>
+          <li>Future connection to listings / valuation / portfolio data</li>
+        </ul>
       </div>
 
       <div class="panel-block">
@@ -216,6 +227,7 @@
       <div class="map-caption">
         <strong>Prototype note</strong>
         This is a standalone prototype showing how the Ombu territorial layer could operate on Stuttgart using official cadastral parcels and OSM urban context.
+        Bodenrichtwerte are official land reference values in €/m², not apartment transaction prices or asking prices.
       </div>
     </div>
   </div>
