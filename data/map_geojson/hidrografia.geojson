@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Creek (demo)" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-49.256, -25.427], [-49.240, -25.433]]
+      }
+    }
+  ]
+}

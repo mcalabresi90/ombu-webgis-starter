@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "North district (demo)" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-49.255, -25.426],
+          [-49.241, -25.426],
+          [-49.241, -25.432],
+          [-49.255, -25.432],
+          [-49.255, -25.426]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "South district (demo)" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-49.255, -25.432],
+          [-49.241, -25.432],
+          [-49.241, -25.438],
+          [-49.255, -25.438],
+          [-49.255, -25.432]
+        ]]
+      }
+    }
+  ]
+}

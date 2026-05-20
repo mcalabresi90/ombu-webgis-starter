@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "radius_m": 1000, "kind": "buffer" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-49.2575, -25.4305],
+          [-49.2385, -25.4305],
+          [-49.2385, -25.4225],
+          [-49.2575, -25.4225],
+          [-49.2575, -25.4305]
+        ]]
+      }
+    }
+  ]
+}

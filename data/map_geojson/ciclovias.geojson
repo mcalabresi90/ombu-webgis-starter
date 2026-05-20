@@ -1,0 +1,13 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "tipo": "ciclovia", "name": "Cycle path (demo)" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-49.252, -25.429], [-49.244, -25.431]]
+      }
+    }
+  ]
+}

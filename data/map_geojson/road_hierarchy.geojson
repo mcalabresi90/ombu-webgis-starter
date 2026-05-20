@@ -1,0 +1,29 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "road_class": "primary", "name": "Main axis (demo)" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-49.257, -25.430], [-49.239, -25.430]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "road_class": "secondary", "name": "Collector (demo)" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-49.248, -25.428], [-49.248, -25.432]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "road_class": "tertiary", "name": "Local (demo)" },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [[-49.250, -25.4295], [-49.246, -25.4305]]
+      }
+    }
+  ]
+}

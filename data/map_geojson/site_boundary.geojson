@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "site_id": "DEMO-001", "name": "Study site (placeholder)" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-49.24835, -25.42975],
+          [-49.24755, -25.42980],
+          [-49.24750, -25.43025],
+          [-49.24840, -25.43030],
+          [-49.24835, -25.42975]
+        ]]
+      }
+    }
+  ]
+}

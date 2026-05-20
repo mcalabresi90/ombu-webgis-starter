@@ -1,0 +1,76 @@
+{
+  "description": "Starter pack sample — site context map. Replace filenames with your published GeoJSON.",
+  "baseMap": "light_nolabels",
+  "center": [-49.248, -25.430],
+  "zoom": 15,
+  "layers": [
+    {
+      "id": "neighborhoods",
+      "label": "Neighborhoods",
+      "type": "geojson",
+      "visible": true,
+      "url": "../../data/map_geojson/neighborhoods.geojson",
+      "style": {
+        "color": "#4b321e",
+        "weight": 1.1,
+        "opacity": 0.86,
+        "fillColor": "#f5e1a4",
+        "fillOpacity": 0.45
+      }
+    },
+    {
+      "id": "buffer_1000m",
+      "label": "Buffer 1000 m",
+      "type": "geojson",
+      "visible": true,
+      "url": "../../data/map_geojson/buffer_1000m.geojson",
+      "style": {
+        "color": "#c06158",
+        "weight": 1,
+        "opacity": 0.5,
+        "fillColor": "#c06158",
+        "fillOpacity": 0.02
+      }
+    },
+    {
+      "id": "buffer_500m",
+      "label": "Buffer 500 m",
+      "type": "geojson",
+      "visible": true,
+      "url": "../../data/map_geojson/buffer_500m.geojson",
+      "style": {
+        "color": "#c06158",
+        "weight": 1.6,
+        "opacity": 0.75,
+        "fillColor": "#c06158",
+        "fillOpacity": 0.04
+      }
+    },
+    {
+      "id": "site_boundary",
+      "label": "Study site",
+      "type": "geojson",
+      "visible": true,
+      "url": "../../data/map_geojson/site_boundary.geojson",
+      "style": {
+        "color": "#c06158",
+        "weight": 2.4,
+        "opacity": 1,
+        "fillColor": "#c06158",
+        "fillOpacity": 0.15
+      }
+    },
+    {
+      "id": "site_pin",
+      "label": "Site pin",
+      "type": "marker",
+      "visible": true,
+      "position": [-49.248, -25.430],
+      "style": {
+        "color": "#c06158",
+        "size": 18,
+        "opacity": 1
+      }
+    }
+  ]
+}
