@@ -35,7 +35,7 @@ Export manifest: `data/map_geojson/export_manifest.json`
 
 ## How to regenerate GeoJSON
 
-From `exports/ombu-stuttgart-spatial-prototype/`:
+From the repository root (`ombu-webgis-starter/`) or `demos/stuttgart/`:
 
 ```bash
 python scripts/export_stuttgart_layers.py
@@ -56,11 +56,11 @@ Requires network; ~5–15 s for the central window.
 ## Run the demo locally
 
 ```bash
-cd exports/ombu-stuttgart-spatial-prototype
+cd ombu-webgis-starter
 python -m http.server 8080
 ```
 
-Open: **http://localhost:8080/**
+Open: **http://localhost:8080/demos/stuttgart/**
 
 Do not use `file://` (browser blocks GeoJSON fetch).
 
